@@ -103,12 +103,12 @@
     "license": "UNLICENSED",
     "repository": {
         "type": "git",
-        "url": "https://github.com/VeereshMaps/toastify-all.git"
+        "url": "https://github.com/VeereshPoojari/toastify-all.git"
     },
     "bugs": {
-        "url": "https://github.com/VeereshMaps/toastify-all/issues"
+        "url": "https://github.com/VeereshPoojari/toastify-all/issues"
     },
-    "homepage": "https://veereshmaps.github.io/toastify-all",
+    "homepage": "https://veereshpoojari.github.io/toastify-all",
     "devDependencies": {
         "@angular/core": "^17.0.0",
         "@babel/core": "^7.22.0",

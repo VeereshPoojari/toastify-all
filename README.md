@@ -12,7 +12,7 @@
 ## 🎮 Live Interactive Demo
 
 Try Toastify-All in real-time in your browser:  
-👉 **[Open Live Interactive Playground](https://veereshmaps.github.io/toastify-all/)**  
+👉 **[Open Live Interactive Playground](https://veereshpoojari.github.io/toastify-all/)**  
 *(Customize positions, themes, transitions, test audio chimes, switch frameworks, and copy code snippets in 1 click)*
 
 ---
@@ -298,7 +298,7 @@ Contributions, issues, and feature requests are welcome!
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/VeereshMaps/toastify-all.git
+git clone https://github.com/VeereshPoojari/toastify-all.git
 
 # 2. Install dependencies
 npm install
