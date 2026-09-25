@@ -15,8 +15,8 @@
       --primary-hover: #2563eb;
       --accent: #8b5cf6;
       --bg: #0b0f19;
-      --card-bg: rgba(17, 24, 39, 0.75);
-      --card-hover: rgba(24, 33, 53, 0.85);
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --card-hover: rgba(24, 33, 53, 0.95);
       --border: rgba(255, 255, 255, 0.08);
       --border-focus: rgba(99, 102, 241, 0.5);
       --text: #f8fafc;
@@ -27,6 +27,28 @@
       --error: #ef4444;
       --warning: #f59e0b;
       --info: #3b82f6;
+    }
+
+    /* Light Theme Palette */
+    body.light-theme {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent: #7c3aed;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --card-hover: #ffffff;
+      --border: #e2e8f0;
+      --border-focus: rgba(37, 99, 235, 0.4);
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #64748b;
+      --code-bg: #090d16;
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.07) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+      color: var(--text);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,16 +63,163 @@
       background-attachment: fixed;
       color: var(--text);
       min-height: 100vh;
+      width: 100%;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding: 36px 16px;
+      align-items: stretch;
+      transition: background-color 0.25s ease, color 0.25s ease;
     }
 
-    header {
+    /* Top Sticky Navigation Bar (100% Full Width) */
+    .top-navbar {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 32px;
+      background: rgba(11, 15, 25, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-sizing: border-box;
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+
+    body.light-theme .top-navbar {
+      background: rgba(255, 255, 255, 0.9);
+      border-bottom-color: #e2e8f0;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .nav-logo {
+      font-size: 1.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 40%, #60a5fa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    body.light-theme .nav-title {
+      background: linear-gradient(135deg, #0f172a 40%, #2563eb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .pill-badge-nav {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: #a5b4fc;
+    }
+
+    body.light-theme .pill-badge-nav {
+      background: rgba(37, 99, 235, 0.1);
+      border-color: rgba(37, 99, 235, 0.3);
+      color: #2563eb;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid var(--border);
+      color: #cbd5e1;
+      font-size: 0.8rem;
+      padding: 6px 13px;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+    }
+    .badge:hover {
+      background: rgba(51, 65, 85, 0.85);
+      border-color: rgba(147, 197, 253, 0.4);
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    body.light-theme .badge {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #334155;
+    }
+
+    body.light-theme .badge:hover {
+      background: #e2e8f0;
+      border-color: #93c5fd;
+      color: #2563eb;
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid var(--border);
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 0;
+    }
+    .theme-toggle-btn:hover {
+      background: rgba(51, 65, 85, 0.9);
+      color: #ffffff;
+      border-color: #93c5fd;
+      transform: scale(1.05);
+    }
+    body.light-theme .theme-toggle-btn {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #334155;
+    }
+    body.light-theme .theme-toggle-btn:hover {
+      background: #e2e8f0;
+      color: #2563eb;
+    }
+
+    /* Hero Header */
+    .hero-header {
       text-align: center;
-      margin-bottom: 32px;
-      max-width: 760px;
+      padding: 32px 20px 24px;
+      max-width: 900px;
+      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .pill-badge {
@@ -65,9 +234,17 @@
       font-size: 0.78rem;
       font-weight: 600;
       letter-spacing: 0.03em;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
     }
+
+    body.light-theme .pill-badge {
+      background: rgba(37, 99, 235, 0.08);
+      border-color: rgba(37, 99, 235, 0.25);
+      color: #2563eb;
+      box-shadow: 0 0 16px rgba(37, 99, 235, 0.1);
+    }
+
     .pill-badge span.dot {
       width: 6px;
       height: 6px;
@@ -81,62 +258,69 @@
       50% { opacity: 0.5; transform: scale(1.2); }
     }
 
-    header h1 {
-      font-size: 2.5rem;
+    .hero-header h1 {
+      font-size: clamp(1.85rem, 3.8vw, 2.7rem);
       font-weight: 800;
       letter-spacing: -0.03em;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       background: linear-gradient(135deg, #ffffff 30%, #93c5fd 70%, #c084fc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       line-height: 1.15;
     }
 
-    header p {
+    body.light-theme .hero-header h1 {
+      background: linear-gradient(135deg, #0f172a 30%, #2563eb 70%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-header p {
       color: var(--text-muted);
       font-size: 1.05rem;
       line-height: 1.55;
     }
 
-    .badges {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin-top: 16px;
-      flex-wrap: wrap;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      background: rgba(30, 41, 59, 0.7);
-      border: 1px solid var(--border);
-      color: #cbd5e1;
-      font-size: 0.82rem;
-      padding: 6px 14px;
-      border-radius: 9999px;
-      text-decoration: none;
-      font-weight: 600;
-      backdrop-filter: blur(8px);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .badge:hover {
-      background: rgba(51, 65, 85, 0.8);
-      border-color: rgba(147, 197, 253, 0.4);
-      color: #ffffff;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
+    /* 100% Fluid & Responsive Grid */
     .playground-container {
       display: grid;
-      grid-template-columns: 1.05fr 1.2fr;
+      grid-template-columns: minmax(360px, 460px) minmax(400px, 1fr);
       gap: 24px;
-      max-width: 1200px;
       width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 32px 48px;
+      box-sizing: border-box;
+      align-items: start;
     }
-    @media (max-width: 980px) {
-      .playground-container { grid-template-columns: 1fr; }
+
+    @media (max-width: 1080px) {
+      .playground-container {
+        grid-template-columns: 1fr;
+        padding: 0 20px 40px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .top-navbar {
+        padding: 10px 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .nav-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .badge span {
+        display: none;
+      }
+      .playground-container {
+        padding: 0 12px 28px;
+        gap: 16px;
+      }
+      .card {
+        padding: 16px;
+      }
     }
 
     .card {
@@ -144,9 +328,15 @@
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 24px;
-      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.45);
       backdrop-filter: blur(20px);
       position: relative;
+      box-sizing: border-box;
+      transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    body.light-theme .card {
+      box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.06), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
     }
 
     .card-header {
@@ -612,6 +802,7 @@
       text-align: center;
       color: var(--text-dim);
       font-size: 0.85rem;
+      padding-bottom: 24px;
     }
     footer a {
       color: #60a5fa;
@@ -620,6 +811,51 @@
     }
     footer a:hover {
       text-decoration: underline;
+    }
+
+    /* Component Light Theme Overrides */
+    body.light-theme .type-btn,
+    body.light-theme .radio-btn,
+    body.light-theme .pos-btn,
+    body.light-theme .slider-container,
+    body.light-theme .toggle-item,
+    body.light-theme .btn-clear {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #334155;
+    }
+
+    body.light-theme .type-btn:hover,
+    body.light-theme .radio-btn:hover,
+    body.light-theme .pos-btn:hover,
+    body.light-theme .toggle-item:hover,
+    body.light-theme .btn-clear:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    body.light-theme .custom-select {
+      background: #ffffff;
+      border-color: #cbd5e1;
+      color: #0f172a;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    body.light-theme .custom-select option {
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    body.light-theme .step-title {
+      color: #0f172a;
+    }
+
+    body.light-theme .code-window-bar {
+      background: #1e293b;
+    }
+
+    body.light-theme .toggle-item input[type="checkbox"] {
+      accent-color: #2563eb;
     }
   </style>
 
@@ -633,29 +869,52 @@
 </head>
 <body>
 
-  <!-- Header -->
-  <header>
+  <!-- Top Responsive Navigation Bar (Sticky Full Width 100%) -->
+  <nav class="top-navbar">
+    <div class="nav-brand">
+      <div class="nav-logo">🔔</div>
+      <div class="nav-title">Toastify-All</div>
+      <span class="pill-badge-nav">v1.0.1</span>
+    </div>
+    
+    <div class="nav-actions">
+      <a class="badge" href="https://www.npmjs.com/package/toastify-all" target="_blank" title="npm package">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16.5 9.4 7.55 4.24a1.78 1.78 0 0 0-2.5 1.55v12.42a1.78 1.78 0 0 0 2.5 1.55L16.5 14.6a1.78 1.78 0 0 0 0-3.2z"/></svg>
+        <span>npm: toastify-all</span>
+      </a>
+      <a class="badge" href="https://github.com/VeereshPoojari/toastify-all" target="_blank" title="GitHub repository">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        <span>GitHub</span>
+      </a>
+      <a class="badge" href="https://cdn.jsdelivr.net/npm/toastify-all/dist/index.umd.js" target="_blank" title="CDN delivery">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span>CDN</span>
+      </a>
+      <!-- Theme Switcher Button -->
+      <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle Light / Dark Theme">
+        <svg id="theme-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="hero-header">
     <div class="pill-badge">
       <span class="dot"></span>
       <span>v1.0.1 • Universal Multi-Framework Toast Library</span>
     </div>
     <h1>🔔 Toastify-All Playground</h1>
     <p>One unified, modern notification API that works seamlessly across <strong>React, Next.js, Vue 3, Angular, React Native</strong>, and <strong>Vanilla JS</strong>.</p>
-    
-    <div class="badges">
-      <a class="badge" href="https://www.npmjs.com/package/toastify-all" target="_blank">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16.5 9.4 7.55 4.24a1.78 1.78 0 0 0-2.5 1.55v12.42a1.78 1.78 0 0 0 2.5 1.55L16.5 14.6a1.78 1.78 0 0 0 0-3.2z"/></svg>
-        npm: toastify-all
-      </a>
-      <a class="badge" href="https://github.com/VeereshPoojari/toastify-all" target="_blank">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-        GitHub Repository
-      </a>
-      <a class="badge" href="https://cdn.jsdelivr.net/npm/toastify-all/dist/index.umd.js" target="_blank">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        CDN jsDelivr
-      </a>
-    </div>
   </header>
 
   <!-- Main Container -->
@@ -1322,6 +1581,41 @@ export function HomeScreen() {
     document.getElementById('btn-copy-trigger').addEventListener('click', () => {
       handleCopy('btn-copy-trigger', 'code-trigger');
     });
+
+    // Theme Switcher Logic (Light / Dark Mode)
+    const themeBtn = document.getElementById('theme-toggle-btn');
+    const themeIcon = document.getElementById('theme-icon');
+
+    function applyTheme(isLight) {
+      document.body.classList.toggle('light-theme', isLight);
+      localStorage.setItem('toastify_playground_theme', isLight ? 'light' : 'dark');
+      if (themeIcon) {
+        if (isLight) {
+          // Moon icon
+          themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+          themeBtn.title = 'Switch to Dark Mode';
+        } else {
+          // Sun icon
+          themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+          themeBtn.title = 'Switch to Light Mode';
+        }
+      }
+    }
+
+    const savedTheme = localStorage.getItem('toastify_playground_theme');
+    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
+      applyTheme(true);
+    } else {
+      applyTheme(false);
+    }
+
+    if (themeBtn) {
+      themeBtn.addEventListener('click', () => {
+        const isCurrentlyLight = document.body.classList.contains('light-theme');
+        applyTheme(!isCurrentlyLight);
+      });
+    }
   </script>
 </body>
 </html>
