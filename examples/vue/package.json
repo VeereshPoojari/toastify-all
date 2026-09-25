@@ -1,0 +1,16 @@
+{
+    "name": "notification-all-vue-example",
+    "version": "1.0.0",
+    "private": true,
+    "dependencies": {
+        "vue": "^3.3.0",
+        "notification-all": "^1.0.0"
+    },
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build"
+    },
+    "devDependencies": {
+        "@vue/cli-service": "^5.0.0"
+    }
+}

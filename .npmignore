@@ -1,0 +1,34 @@
+# Source & Development Files
+src/
+examples/
+tests/
+__tests__/
+
+# Configuration Files
+rollup.config.*
+babel.config.*
+tsconfig*.json
+jest.config.*
+.eslintrc*
+.gitignore
+.gitattributes
+.prettierrc*
+
+# Development & Testing
+node_modules/
+coverage/
+.nyc_output/
+*.log
+*.tgz
+.env*
+.cache/
+.eslintcache
+.yalc/
+yalc.lock
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini

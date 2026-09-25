@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toastify-All 🔔 - Universal Interactive Playground & Guide</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔔</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --accent: #8b5cf6;
+      --bg: #0b0f19;
+      --card-bg: rgba(17, 24, 39, 0.75);
+      --card-hover: rgba(24, 33, 53, 0.85);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(99, 102, 241, 0.5);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --code-bg: #060911;
+      --success: #10b981;
+      --error: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.12) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 36px 16px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+      max-width: 760px;
+    }
+
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #a5b4fc;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      margin-bottom: 14px;
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+    }
+    .pill-badge span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #ffffff 30%, #93c5fd 70%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.15;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.55;
+    }
+
+    .badges {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid var(--border);
+      color: #cbd5e1;
+      font-size: 0.82rem;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .badge:hover {
+      background: rgba(51, 65, 85, 0.8);
+      border-color: rgba(147, 197, 253, 0.4);
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .playground-container {
+      display: grid;
+      grid-template-columns: 1.05fr 1.2fr;
+      gap: 24px;
+      max-width: 1200px;
+      width: 100%;
+    }
+    @media (max-width: 980px) {
+      .playground-container { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(20px);
+      position: relative;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-header h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-header .header-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    /* Type buttons with colored accents */
+    .type-btn {
+      flex: 1;
+      min-width: 75px;
+      text-align: center;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      color: #94a3b8;
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .type-btn:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .type-btn.active[data-val="success"] {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: #10b981;
+      color: #34d399;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.25);
+    }
+    .type-btn.active[data-val="error"] {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: #ef4444;
+      color: #f87171;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.25);
+    }
+    .type-btn.active[data-val="warning"] {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: #f59e0b;
+      color: #fbbf24;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.25);
+    }
+    .type-btn.active[data-val="info"] {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: #3b82f6;
+      color: #60a5fa;
+      box-shadow: 0 0 14px rgba(59, 130, 246, 0.25);
+    }
+    .type-btn.active[data-val="promise"] {
+      background: rgba(168, 85, 247, 0.15);
+      border-color: #a855f7;
+      color: #c084fc;
+      box-shadow: 0 0 14px rgba(168, 85, 247, 0.25);
+    }
+    .type-btn.active[data-val="loading"] {
+      background: rgba(6, 182, 212, 0.15);
+      border-color: #06b6d4;
+      color: #22d3ee;
+      box-shadow: 0 0 14px rgba(6, 182, 212, 0.25);
+    }
+
+    /* General radio buttons */
+    .radio-btn {
+      flex: 1;
+      min-width: 65px;
+      text-align: center;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      color: #94a3b8;
+      padding: 7px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .radio-btn:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .radio-btn.active {
+      background: #2563eb;
+      border-color: #3b82f6;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.4);
+    }
+
+    /* Position Visual Grid */
+    .position-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+    .pos-btn {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      color: #94a3b8;
+      padding: 8px 6px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+    .pos-btn:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .pos-btn.active {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      border-color: #6366f1;
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Slider */
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.4);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .slider-container input[type="range"] {
+      flex: 1;
+      accent-color: #3b82f6;
+      cursor: pointer;
+    }
+    .slider-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      min-width: 60px;
+      text-align: center;
+    }
+
+    /* Toggles Grid */
+    .toggle-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s;
+    }
+    .toggle-item:hover {
+      background: rgba(30, 41, 59, 0.5);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    .toggle-item input[type="checkbox"] {
+      cursor: pointer;
+      accent-color: #3b82f6;
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Main Trigger Actions */
+    .action-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .btn-trigger {
+      flex: 2;
+      background: linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%);
+      color: #fff;
+      border: none;
+      padding: 13px 20px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 18px rgba(79, 70, 229, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-trigger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(79, 70, 229, 0.6);
+      filter: brightness(1.1);
+    }
+    .btn-trigger:active {
+      transform: translateY(0);
+    }
+    .btn-clear {
+      flex: 1;
+      background: rgba(30, 41, 59, 0.6);
+      color: #cbd5e1;
+      border: 1px solid var(--border);
+      padding: 13px 16px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-clear:hover {
+      background: rgba(51, 65, 85, 0.8);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Framework Dropdown Selector */
+    .fw-dropdown-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .custom-select-container {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+    .custom-select {
+      appearance: none;
+      -webkit-appearance: none;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #f1f5f9;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 6px 30px 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      outline: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    .custom-select:hover {
+      border-color: rgba(99, 102, 241, 0.5);
+      background: rgba(30, 41, 59, 0.95);
+      color: #ffffff;
+    }
+    .custom-select:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+    }
+    .custom-select option {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 8px;
+      font-weight: 600;
+    }
+    .select-arrow {
+      position: absolute;
+      right: 10px;
+      pointer-events: none;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Guided Step Cards */
+    .step-card {
+      margin-bottom: 18px;
+    }
+    .step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .step-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .step-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .file-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #a5b4fc;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      padding: 2px 8px;
+      border-radius: 5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* macOS Window Code Box */
+    .code-window {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+    }
+    .code-window-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(15, 23, 42, 0.85);
+      padding: 8px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .window-dots {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .window-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .window-dot.red { background: #ef4444; }
+    .window-dot.yellow { background: #f59e0b; }
+    .window-dot.green { background: #10b981; }
+
+    .window-file-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
+    /* Copy Button with SVG Icon */
+    .btn-copy-code {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .btn-copy-code:hover {
+      background: rgba(51, 65, 85, 0.9);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    .btn-copy-code.copied {
+      background: #10b981 !important;
+      border-color: #059669 !important;
+      color: #fff !important;
+    }
+    .btn-copy-code svg {
+      transition: transform 0.15s;
+    }
+
+    .code-content {
+      padding: 14px 16px;
+      font-family: 'JetBrains Mono', ui-monospace, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.8rem;
+      line-height: 1.55;
+      color: #e2e8f0;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* Terminal Install Box */
+    .terminal-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 10px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: #e2e8f0;
+    }
+    .terminal-prompt {
+      color: #38bdf8;
+      user-select: none;
+      margin-right: 8px;
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+    footer a {
+      color: #60a5fa;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+  <!-- Load Toastify-All via CDN or local fallback -->
+  <script src="https://cdn.jsdelivr.net/npm/toastify-all/dist/index.umd.js"></script>
+  <script>
+    if (typeof ToastifyAll === 'undefined' && typeof OmniToast === 'undefined') {
+      document.write('<script src="../dist/index.umd.js"><\/script>');
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="pill-badge">
+      <span class="dot"></span>
+      <span>v1.0.0 • Universal Multi-Framework Toast Library</span>
+    </div>
+    <h1>🔔 Toastify-All Playground</h1>
+    <p>One unified, modern notification API that works seamlessly across <strong>React, Next.js, Vue 3, Angular, React Native</strong>, and <strong>Vanilla JS</strong>.</p>
+    
+    <div class="badges">
+      <a class="badge" href="https://www.npmjs.com/package/toastify-all" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16.5 9.4 7.55 4.24a1.78 1.78 0 0 0-2.5 1.55v12.42a1.78 1.78 0 0 0 2.5 1.55L16.5 14.6a1.78 1.78 0 0 0 0-3.2z"/></svg>
+        npm: toastify-all
+      </a>
+      <a class="badge" href="https://github.com/VeereshMaps/toastify-all" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub Repository
+      </a>
+      <a class="badge" href="https://cdn.jsdelivr.net/npm/toastify-all/dist/index.umd.js" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        CDN jsDelivr
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="playground-container">
+    
+    <!-- Controls Column (Left) -->
+    <div class="card">
+      <div class="card-header">
+        <h2>🎛️ Customize Toast</h2>
+        <span class="header-tag">Live Playground</span>
+      </div>
+
+      <!-- Toast Type -->
+      <div class="form-group">
+        <label>Toast Type & Variant</label>
+        <div class="btn-group" id="type-group">
+          <div class="type-btn active" data-val="success">✅ Success</div>
+          <div class="type-btn" data-val="error">❌ Error</div>
+          <div class="type-btn" data-val="warning">⚠️ Warning</div>
+          <div class="type-btn" data-val="info">ℹ️ Info</div>
+          <div class="type-btn" data-val="promise">⏳ Promise</div>
+          <div class="type-btn" data-val="loading">🔄 Loading</div>
+        </div>
+      </div>
+
+      <!-- Theme -->
+      <div class="form-group">
+        <label>Visual Theme</label>
+        <div class="btn-group" id="theme-group">
+          <div class="radio-btn" data-val="light">☀️ Light</div>
+          <div class="radio-btn" data-val="dark">🌙 Dark</div>
+          <div class="radio-btn active" data-val="colored">🎨 Colored</div>
+          <div class="radio-btn" data-val="system">💻 System</div>
+        </div>
+      </div>
+
+      <!-- Position (Visual Grid) -->
+      <div class="form-group">
+        <label>Screen Position</label>
+        <div class="position-grid" id="position-group">
+          <div class="pos-btn" data-val="top-left">Top Left</div>
+          <div class="pos-btn" data-val="top-center">Top Center</div>
+          <div class="pos-btn active" data-val="top-right">Top Right</div>
+          <div class="pos-btn" data-val="bottom-left">Bottom Left</div>
+          <div class="pos-btn" data-val="bottom-center">Bottom Center</div>
+          <div class="pos-btn" data-val="bottom-right">Bottom Right</div>
+        </div>
+      </div>
+
+      <!-- Transition -->
+      <div class="form-group">
+        <label>Animation Transition</label>
+        <div class="btn-group" id="transition-group">
+          <div class="radio-btn active" data-val="bounce">Bounce</div>
+          <div class="radio-btn" data-val="slide">Slide</div>
+          <div class="radio-btn" data-val="zoom">Zoom</div>
+          <div class="radio-btn" data-val="flip">Flip</div>
+        </div>
+      </div>
+
+      <!-- Duration -->
+      <div class="form-group">
+        <label>
+          <span>Auto Close Duration</span>
+          <span class="slider-val" id="duration-val">4000ms</span>
+        </label>
+        <div class="slider-container">
+          <input type="range" id="duration" min="1000" max="10000" step="500" value="4000" />
+        </div>
+      </div>
+
+      <!-- Feature Toggles -->
+      <div class="form-group">
+        <label>Interactive Features</label>
+        <div class="toggle-grid">
+          <label class="toggle-item"><input type="checkbox" id="pauseOnHover" checked /> ⏸️ Pause on Hover</label>
+          <label class="toggle-item"><input type="checkbox" id="pauseOnFocusLoss" checked /> 🔀 Pause on Blur</label>
+          <label class="toggle-item"><input type="checkbox" id="draggable" checked /> 👆 Swipe to Dismiss</label>
+          <label class="toggle-item"><input type="checkbox" id="closeOnClick" checked /> 🖱️ Close on Click</label>
+          <label class="toggle-item"><input type="checkbox" id="hideProgressBar" /> 📏 Hide Progress</label>
+          <label class="toggle-item"><input type="checkbox" id="sound" checked /> 🔔 Audio Chime</label>
+          <label class="toggle-item"><input type="checkbox" id="actionBtn" /> ↩️ Action Button</label>
+        </div>
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <button class="btn-trigger" id="btn-trigger">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          🚀 Trigger Live Toast
+        </button>
+        <button class="btn-clear" id="btn-clear">🧹 Clear All</button>
+      </div>
+    </div>
+
+    <!-- Implementation Guide Column (Right) -->
+    <div class="card">
+      <div class="card-header">
+        <h2>💻 Implementation Guide</h2>
+        <div class="fw-dropdown-wrapper">
+          <div class="custom-select-container">
+            <select id="framework-select" class="custom-select" aria-label="Select Framework">
+              <option value="react" selected>⚛️ React / Next.js</option>
+              <option value="vue">💚 Vue 3</option>
+              <option value="angular">🅰️ Angular</option>
+              <option value="react-native">📱 React Native</option>
+              <option value="vanilla">🍦 Vanilla JS / CDN</option>
+            </select>
+            <div class="select-arrow">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 1: Install -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-title">
+            <span class="step-num">1</span>
+            <span>Install Package</span>
+          </div>
+          <span class="file-badge">Terminal</span>
+        </div>
+        <div class="terminal-box">
+          <div><span class="terminal-prompt">$</span><span id="install-cmd">npm i toastify-all</span></div>
+          <button class="btn-copy-code" id="btn-copy-install">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span>Copy</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Setup Container / Plugin -->
+      <div class="step-card" id="step-setup-card">
+        <div class="step-header">
+          <div class="step-title">
+            <span class="step-num">2</span>
+            <span id="step-setup-title">Setup Container (Once at App Root)</span>
+          </div>
+          <span class="file-badge" id="step-setup-file">📄 src/App.jsx</span>
+        </div>
+        <div class="code-window">
+          <div class="code-window-bar">
+            <div class="window-dots">
+              <span class="window-dot red"></span>
+              <span class="window-dot yellow"></span>
+              <span class="window-dot green"></span>
+            </div>
+            <span class="window-file-name" id="step-setup-filename">App.jsx</span>
+            <button class="btn-copy-code" id="btn-copy-setup">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <div class="code-content" id="code-setup">// Loading setup...</div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Trigger Toast -->
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-title">
+            <span class="step-num" id="step-trigger-num">3</span>
+            <span>Trigger Toast (In Your Component)</span>
+          </div>
+          <span class="file-badge" id="step-trigger-file">📄 AnyComponent.jsx</span>
+        </div>
+        <div class="code-window">
+          <div class="code-window-bar">
+            <div class="window-dots">
+              <span class="window-dot red"></span>
+              <span class="window-dot yellow"></span>
+              <span class="window-dot green"></span>
+            </div>
+            <span class="window-file-name" id="step-trigger-filename">AnyComponent.jsx</span>
+            <button class="btn-copy-code" id="btn-copy-trigger">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy Code</span>
+            </button>
+          </div>
+          <div class="code-content" id="code-trigger">// Generating code...</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    Made with ❤️ by <a href="https://www.npmjs.com/~veerupoojari" target="_blank">Veeresh</a> • Universal Notification Library
+  </footer>
+
+  <script>
+    // State
+    const state = {
+      framework: 'react',
+      type: 'success',
+      theme: 'colored',
+      position: 'top-right',
+      transition: 'bounce',
+      duration: 4000,
+      pauseOnHover: true,
+      pauseOnFocusLoss: true,
+      draggable: true,
+      closeOnClick: true,
+      hideProgressBar: false,
+      sound: true,
+      actionBtn: false
+    };
+
+    // Framework Dropdown
+    const frameworkSelect = document.getElementById('framework-select');
+    frameworkSelect.addEventListener('change', (e) => {
+      state.framework = e.target.value;
+      updateCodeGuide();
+    });
+
+    // Helper for button selection
+    function setupBtnGroup(groupId, stateKey, btnClass = '.radio-btn') {
+      const container = document.getElementById(groupId);
+      container.querySelectorAll(btnClass).forEach(btn => {
+        btn.addEventListener('click', () => {
+          container.querySelectorAll(btnClass).forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          state[stateKey] = btn.dataset.val;
+          updateCodeGuide();
+        });
+      });
+    }
+
+    setupBtnGroup('type-group', 'type', '.type-btn');
+    setupBtnGroup('theme-group', 'theme', '.radio-btn');
+    setupBtnGroup('position-group', 'position', '.pos-btn');
+    setupBtnGroup('transition-group', 'transition', '.radio-btn');
+
+    // Slider
+    const durationSlider = document.getElementById('duration');
+    const durationVal = document.getElementById('duration-val');
+    durationSlider.addEventListener('input', (e) => {
+      state.duration = Number(e.target.value);
+      durationVal.textContent = state.duration + 'ms';
+      updateCodeGuide();
+    });
+
+    // Checkboxes
+    ['pauseOnHover', 'pauseOnFocusLoss', 'draggable', 'closeOnClick', 'hideProgressBar', 'sound', 'actionBtn'].forEach(id => {
+      const cb = document.getElementById(id);
+      cb.addEventListener('change', (e) => {
+        state[id] = e.target.checked;
+        updateCodeGuide();
+      });
+    });
+
+    function getToastMessage() {
+      const messages = {
+        success: 'Profile saved successfully! 🚀',
+        error: 'Connection timeout. Please retry!',
+        warning: 'Warning: Your session expires in 2 minutes.',
+        info: 'New updates are ready to install.',
+        loading: 'Uploading files to server...'
+      };
+      return messages[state.type] || 'Hello from Toastify-All!';
+    }
+
+    function formatOptions() {
+      const options = {
+        position: state.position,
+        autoClose: state.type === 'loading' ? false : state.duration,
+        theme: state.theme,
+        transition: state.transition,
+        hideProgressBar: state.hideProgressBar || undefined,
+        closeOnClick: !state.closeOnClick ? false : undefined,
+        pauseOnHover: !state.pauseOnHover ? false : undefined,
+        draggable: !state.draggable ? false : undefined,
+        sound: state.sound || undefined,
+        action: state.actionBtn ? { label: 'Undo', onClick: "() => console.log('Undo clicked')" } : undefined
+      };
+
+      Object.keys(options).forEach(key => options[key] === undefined && delete options[key]);
+
+      let json = JSON.stringify(options, null, 2);
+      json = json.replace(/"(onClick)": "(.*?)"/, '$1: $2');
+      return json;
+    }
+
+    // Dynamic Step Guide Generator
+    function updateCodeGuide() {
+      const fw = state.framework || 'react';
+      const msg = getToastMessage();
+      const opts = formatOptions();
+
+      const setupCard = document.getElementById('step-setup-card');
+      const setupTitle = document.getElementById('step-setup-title');
+      const setupFile = document.getElementById('step-setup-file');
+      const setupFilename = document.getElementById('step-setup-filename');
+      const setupCode = document.getElementById('code-setup');
+
+      const triggerFile = document.getElementById('step-trigger-file');
+      const triggerFilename = document.getElementById('step-trigger-filename');
+      const triggerCode = document.getElementById('code-trigger');
+      const triggerNum = document.getElementById('step-trigger-num');
+
+      if (fw === 'react') {
+        setupCard.style.display = 'block';
+        triggerNum.textContent = '3';
+        setupTitle.textContent = 'Setup Container (Global Configuration at App Root)';
+        setupFile.textContent = '📄 src/App.jsx or app/layout.tsx';
+        setupFilename.textContent = 'App.jsx';
+
+        const reactProps = [];
+        reactProps.push(`position="${state.position}"`);
+        reactProps.push(`autoClose={${state.duration}}`);
+        reactProps.push(`theme="${state.theme}"`);
+        if (state.transition !== 'bounce') reactProps.push(`transition="${state.transition}"`);
+        if (state.hideProgressBar) reactProps.push(`hideProgressBar`);
+        if (!state.closeOnClick) reactProps.push(`closeOnClick={false}`);
+        if (!state.pauseOnHover) reactProps.push(`pauseOnHover={false}`);
+        if (!state.draggable) reactProps.push(`draggable={false}`);
+        if (state.sound) reactProps.push(`sound`);
+
+        const formattedReactProps = '\n        ' + reactProps.join('\n        ') + '\n      ';
+
+        setupCode.textContent = `import { ToastContainer } from 'toastify-all/react';
+
+export default function App({ children }) {
+  return (
+    <div>
+      {children}
+      {/* 🌐 Global Toast Configuration - applies to all toasts across your entire app */}
+      <ToastContainer${formattedReactProps}/>
+    </div>
+  );
+}`;
+
+        triggerFile.textContent = '📄 src/components/AnyButton.jsx';
+        triggerFilename.textContent = 'AnyButton.jsx';
+
+        if (state.type === 'promise') {
+          triggerCode.textContent = `import { toast } from 'toastify-all/react';
+
+export function SaveButton() {
+  const handleSave = () => {
+    // 💡 Inherits global position, theme & duration from <ToastContainer /> automatically!
+    toast.promise(
+      fetchUserData(),
+      {
+        pending: 'Saving changes...',
+        success: 'Saved successfully! 🚀',
+        error: 'Save failed ❌'
+      }
+    );
+  };
+
+  return <button onClick={handleSave}>Save Data</button>;
+}`;
+        } else if (state.type === 'loading') {
+          triggerCode.textContent = `import { toast } from 'toastify-all/react';
+
+export function TaskButton() {
+  const handleTask = async () => {
+    // 💡 Inherits global configuration from <ToastContainer />
+    const toastId = toast.loading("${msg}");
+
+    try {
+      await performAsyncJob();
+      toast.update(toastId, { type: 'success', render: 'Task complete! 🎉', autoClose: 3000 });
+    } catch (err) {
+      toast.update(toastId, { type: 'error', render: 'Task failed! ❌', autoClose: 3000 });
+    }
+  };
+
+  return <button onClick={handleTask}>Start Task</button>;
+}`;
+        } else {
+          triggerCode.textContent = `import { toast } from 'toastify-all/react';
+
+export function NotifyButton() {
+  const showToast = () => {
+    // 💡 Automatically inherits position, theme & autoClose from <ToastContainer />!
+    toast.${state.type}("${msg}");
+
+    // Or pass custom options here anytime to override global defaults:
+    // toast.${state.type}("${msg}", { position: "bottom-left" });
+  };
+
+  return <button onClick={showToast}>Trigger Toast</button>;
+}`;
+        }
+
+      } else if (fw === 'vue') {
+        setupCard.style.display = 'block';
+        triggerNum.textContent = '3';
+        setupTitle.textContent = 'Register Plugin (Global Configuration in main.js)';
+        setupFile.textContent = '📄 src/main.js';
+        setupFilename.textContent = 'main.js';
+
+        const vueOpts = {
+          position: state.position,
+          autoClose: state.duration,
+          theme: state.theme,
+          transition: state.transition,
+          hideProgressBar: state.hideProgressBar || undefined
+        };
+        Object.keys(vueOpts).forEach(k => vueOpts[k] === undefined && delete vueOpts[k]);
+
+        setupCode.textContent = `import { createApp } from 'vue';
+import { ToastifyAllPlugin } from 'toastify-all/vue';
+import App from './App.vue';
+
+const app = createApp(App);
+
+// 🌐 Global Toast Configuration
+app.use(ToastifyAllPlugin, ${JSON.stringify(vueOpts, null, 2)});
+
+app.mount('#app');`;
+
+        triggerFile.textContent = '📄 src/components/MyComponent.vue';
+        triggerFilename.textContent = 'MyComponent.vue';
+
+        if (state.type === 'promise') {
+          triggerCode.textContent = `<script setup>
+import { useToast } from 'toastify-all/vue';
+
+const toast = useToast();
+
+const handleSave = () => {
+  // 💡 Automatically inherits global configuration from app.use()
+  toast.promise(
+    fetchUserData(),
+    {
+      pending: 'Saving changes...',
+      success: 'Saved successfully! 🚀',
+      error: 'Save failed ❌'
+    }
+  );
+};
+<\/script>
+
+<template>
+  <button @click="handleSave">Save Profile</button>
+</template>`;
+        } else {
+          triggerCode.textContent = `<script setup>
+import { useToast } from 'toastify-all/vue';
+
+const toast = useToast();
+
+const notify = () => {
+  // 💡 Automatically inherits global position, theme & autoClose from app.use()
+  toast.${state.type}("${msg}");
+};
+<\/script>
+
+<template>
+  <button @click="notify">Show Toast</button>
+</template>`;
+        }
+
+      } else if (fw === 'angular') {
+        setupCard.style.display = 'block';
+        triggerNum.textContent = '3';
+        setupTitle.textContent = 'Provide Service (Global Configuration in app.config.ts)';
+        setupFile.textContent = '📄 src/app/app.config.ts';
+        setupFilename.textContent = 'app.config.ts';
+
+        const ngOpts = {
+          position: state.position,
+          autoClose: state.duration,
+          theme: state.theme,
+          transition: state.transition
+        };
+
+        setupCode.textContent = `import { ApplicationConfig } from '@angular/core';
+import { provideNotifications } from 'toastify-all/angular';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // 🌐 Global Toast Configuration
+    provideNotifications(${JSON.stringify(ngOpts, null, 4).replace(/\n/g, '\n    ')})
+  ]
+};`;
+
+        triggerFile.textContent = '📄 src/app/app.component.ts';
+        triggerFilename.textContent = 'app.component.ts';
+        triggerCode.textContent = `import { Component } from '@angular/core';
+import { NotificationService } from 'toastify-all/angular';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  template: \`<button (click)="notify()">Trigger Toast</button>\`
+})
+export class AppComponent {
+  constructor(private toast: NotificationService) {}
+
+  notify() {
+    // 💡 Automatically inherits global configuration from provideNotifications()
+    this.toast.${state.type}("${msg}");
+  }
+}`;
+
+      } else if (fw === 'react-native') {
+        setupCard.style.display = 'block';
+        triggerNum.textContent = '3';
+        setupTitle.textContent = 'Mount Native Container (Global Config in App.js)';
+        setupFile.textContent = '📄 App.js';
+        setupFilename.textContent = 'App.js';
+
+        const rnProps = [];
+        rnProps.push(`position="${state.position}"`);
+        rnProps.push(`autoClose={${state.duration}}`);
+        rnProps.push(`theme="${state.theme}"`);
+        const formattedRnProps = '\n        ' + rnProps.join('\n        ') + '\n      ';
+
+        setupCode.textContent = `import React from 'react';
+import { View } from 'react-native';
+import { ToastContainer } from 'toastify-all/react-native';
+
+export default function App() {
+  return (
+    <View style={{ flex: 1 }}>
+      <YourAppScreens />
+      {/* 🌐 Global Native Toast Container */}
+      <ToastContainer${formattedRnProps}/>
+    </View>
+  );
+}`;
+
+        triggerFile.textContent = '📄 screens/HomeScreen.js';
+        triggerFilename.textContent = 'HomeScreen.js';
+        triggerCode.textContent = `import React from 'react';
+import { View, Button } from 'react-native';
+import { toast } from 'toastify-all/react-native';
+
+export function HomeScreen() {
+  return (
+    <Button
+      title="Show Notification"
+      onPress={() => {
+        // 💡 Inherits global configuration from <ToastContainer />
+        toast.${state.type}(
+          "${msg}"
+        );
+      }}
+    />
+  );
+}`;
+
+      } else if (fw === 'vanilla') {
+        setupCard.style.display = 'none';
+        triggerNum.textContent = '2';
+
+        triggerFile.textContent = '📄 index.html';
+        triggerFilename.textContent = 'index.html';
+        triggerCode.textContent = `<!-- 1. Include Toastify-All CDN in <head> or <body> -->
+<script src="https://cdn.jsdelivr.net/npm/toastify-all/dist/index.umd.js"><\/script>
+
+<script>
+  // 2. Trigger notification directly anywhere:
+  ToastifyAll.toast.${state.type}(
+    "${msg}",
+    ${opts}
+  );
+
+  // Or if using ES Modules / Bundler (Vite, Webpack):
+  // import toast from 'toastify-all';
+  // toast.${state.type}("${msg}", ${opts});
+<\/script>`;
+      }
+    }
+
+    updateCodeGuide();
+
+    // Trigger toast in browser for live demo
+    document.getElementById('btn-trigger').addEventListener('click', () => {
+      const toastInstance = window.ToastifyAll || window.OmniToast;
+      if (!toastInstance) {
+        alert('Toastify-All library is still loading. Please try again.');
+        return;
+      }
+
+      const toast = toastInstance.toast;
+      const opts = {
+        position: state.position,
+        autoClose: state.type === 'loading' ? false : state.duration,
+        theme: state.theme,
+        transition: state.transition,
+        hideProgressBar: state.hideProgressBar,
+        closeOnClick: state.closeOnClick,
+        pauseOnHover: state.pauseOnHover,
+        draggable: state.draggable,
+        sound: state.sound
+      };
+
+      if (state.actionBtn) {
+        opts.action = {
+          label: 'Undo',
+          onClick: (id) => toast.info('Undo action executed!')
+        };
+      }
+
+      if (state.type === 'promise') {
+        const mockPromise = () => new Promise((resolve, reject) => {
+          setTimeout(() => {
+            Math.random() > 0.3 ? resolve('Data saved!') : reject(new Error('Network error'));
+          }, 2000);
+        });
+        toast.promise(mockPromise, {
+          pending: 'Saving data to server...',
+          success: 'Data saved successfully! 🚀',
+          error: (err) => `Failed: ${err.message}`
+        }, opts);
+      } else if (state.type === 'loading') {
+        const id = toast.loading('Processing task...', opts);
+        setTimeout(() => {
+          toast.update(id, { type: 'success', render: 'Task complete! 🎉', autoClose: 3000 });
+        }, 3000);
+      } else {
+        const messages = {
+          success: 'Profile saved successfully! 🚀',
+          error: 'Connection lost. Please try again.',
+          warning: 'Warning: Unsaved changes will be lost.',
+          info: 'New features available in Toastify-All!'
+        };
+        toast[state.type](messages[state.type] || 'Hello from Toastify-All!', opts);
+      }
+    });
+
+    // Clear all
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      const toastInstance = window.ToastifyAll || window.OmniToast;
+      if (toastInstance) {
+        toastInstance.toast.dismiss();
+      }
+    });
+
+    // Helper for clipboard copy with visual feedback & SVG checkmark
+    function handleCopy(buttonId, textSourceId) {
+      const btn = document.getElementById(buttonId);
+      const text = document.getElementById(textSourceId).textContent;
+      const originalHTML = btn.innerHTML;
+
+      navigator.clipboard.writeText(text).then(() => {
+        btn.classList.add('copied');
+        btn.innerHTML = `
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Copied!</span>
+        `;
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = originalHTML;
+        }, 1800);
+      });
+    }
+
+    document.getElementById('btn-copy-install').addEventListener('click', () => {
+      handleCopy('btn-copy-install', 'install-cmd');
+    });
+
+    document.getElementById('btn-copy-setup').addEventListener('click', () => {
+      handleCopy('btn-copy-setup', 'code-setup');
+    });
+
+    document.getElementById('btn-copy-trigger').addEventListener('click', () => {
+      handleCopy('btn-copy-trigger', 'code-trigger');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toastify-All Vanilla Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+        }
+
+        .success {
+            background: #10b981;
+            color: white;
+        }
+
+        .error {
+            background: #ef4444;
+            color: white;
+        }
+
+        .warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .info {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .loading {
+            background: #6b7280;
+            color: white;
+        }
+
+        .config {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .clear {
+            background: #374151;
+            color: white;
+        }
+
+        .position {
+            background: #06b6d4;
+            color: white;
+        }
+
+        h1 {
+            color: #1f2937;
+        }
+
+        h3 {
+            color: #374151;
+            margin-top: 30px;
+        }
+
+        p {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔔 Toastify-All Vanilla JavaScript Example</h1>
+        <p>Click the buttons below to see different types of notifications:</p>
+
+        <div class="buttons">
+            <button class="success" id="success-btn">Success</button>
+            <button class="error" id="error-btn">Error</button>
+            <button class="warning" id="warning-btn">Warning</button>
+            <button class="info" id="info-btn">Info</button>
+            <button class="loading" id="loading-btn">Loading</button>
+            <button class="config" id="theme-btn">Toggle Theme</button>
+            <button class="clear" id="clear-btn">Clear All</button>
+        </div>
+
+        <div>
+            <h3>Available Positions:</h3>
+            <div class="buttons">
+                <button class="position" data-position="top-left">Top Left</button>
+                <button class="position" data-position="top-center">Top Center</button>
+                <button class="position" data-position="top-right">Top Right</button>
+                <button class="position" data-position="bottom-left">Bottom Left</button>
+                <button class="position" data-position="bottom-center">Bottom Center</button>
+                <button class="position" data-position="bottom-right">Bottom Right</button>
+            </div>
+        </div>
+
+        <div>
+            <h3>Advanced Features:</h3>
+            <div class="buttons">
+                <button class="info" id="update-btn">Update Notification</button>
+                <button class="warning" id="custom-btn">Custom Options</button>
+                <button class="success" id="promise-btn">Promise Example</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { alertService } from '../../dist/index.esm.js';
+        
+        let isDark = false;
+        let loadingId = null;
+
+        // Success notification
+        document.getElementById('success-btn').addEventListener('click', () => {
+            alertService.success('✅ Operation completed successfully!');
+        });
+
+        // Error notification
+        document.getElementById('error-btn').addEventListener('click', () => {
+            alertService.error('❌ Something went wrong! Please try again.');
+        });
+
+        // Warning notification
+        document.getElementById('warning-btn').addEventListener('click', () => {
+            alertService.warning('⚠️ This action cannot be undone.');
+        });
+
+        // Info notification
+        document.getElementById('info-btn').addEventListener('click', () => {
+            alertService.info('ℹ️ Here is some useful information.');
+        });
+
+        // Loading notification with update
+        document.getElementById('loading-btn').addEventListener('click', () => {
+            if (loadingId) {
+                alertService.update(loadingId, {
+                    type: 'success',
+                    message: '✅ Loading completed!'
+                });
+                loadingId = null;
+            } else {
+                loadingId = alertService.loading('🔄 Processing your request...');
+
+                // Simulate completion after 3 seconds
+                setTimeout(() => {
+                    if (loadingId) {
+                        alertService.update(loadingId, {
+                            type: 'success',
+                            message: '✅ Processing completed!'
+                        });
+                        loadingId = null;
+                    }
+                }, 3000);
+            }
+        });
+
+        // Theme toggle
+        document.getElementById('theme-btn').addEventListener('click', () => {
+            isDark = !isDark;
+            alertService.configure({ theme: isDark ? 'dark' : 'light' });
+            alertService.info(`🎨 Switched to ${isDark ? 'dark' : 'light'} theme`);
+        });
+
+        // Clear all notifications
+        document.getElementById('clear-btn').addEventListener('click', () => {
+            alertService.clearAll();
+            alertService.info('🧹 All notifications cleared');
+        });
+
+        // Position buttons
+        document.querySelectorAll('[data-position]').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const position = e.target.dataset.position;
+                alertService.configure({ position });
+                alertService.info(`📍 Position changed to ${position}`);
+            });
+        });
+
+        // Update notification example
+        document.getElementById('update-btn').addEventListener('click', () => {
+            const id = alertService.info('⏳ Starting process...');
+
+            setTimeout(() => {
+                alertService.update(id, {
+                    type: 'warning',
+                    message: '⚠️ Process is 50% complete...'
+                });
+            }, 1000);
+
+            setTimeout(() => {
+                alertService.update(id, {
+                    type: 'success',
+                    message: '✅ Process completed successfully!'
+                });
+            }, 2000);
+        });
+
+        // Custom options example
+        document.getElementById('custom-btn').addEventListener('click', () => {
+            alertService.warning('🎯 Custom notification with special options!', {
+                autoClose: 10000,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true
+            });
+        });
+
+        // Promise example
+        document.getElementById('promise-btn').addEventListener('click', async () => {
+            try {
+                const id = alertService.loading('🔄 Fetching data...');
+
+                // Simulate API call
+                await new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        Math.random() > 0.3 ? resolve('Data loaded') : reject('Network error');
+                    }, 2000);
+                });
+
+                alertService.update(id, {
+                    type: 'success',
+                    message: '🎉 Data fetched successfully!'
+                });
+            } catch (error) {
+                alertService.error(`❌ Failed to fetch data: ${error}`);
+            }
+        });
+
+        // Initialize with default configuration
+        alertService.configure({
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: 'light'
+        });
+
+        // Show welcome message after a short delay
+        setTimeout(() => {
+            alertService.success('🎉 Welcome to Toastify-All! Try the buttons above.');
+        }, 500);
+
+        // Add some helpful tips
+        setTimeout(() => {
+            alertService.info('💡 Tip: Try dragging the notifications or hover to pause auto-close!');
+        }, 3000);
+    </script>
+</body>
+
+</html>
