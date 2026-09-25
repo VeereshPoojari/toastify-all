@@ -1,6 +1,6 @@
 {
     "name": "toastify-all",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Universal, modern toast notification engine for all JavaScript frameworks and platforms (React, Vue, Angular, React Native, Next.js, Vanilla)",
     "main": "dist/index.js",
     "module": "dist/index.esm.js",
