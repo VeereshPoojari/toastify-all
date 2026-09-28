@@ -100,7 +100,7 @@
         "typescript"
     ],
     "author": "Veeresh <veeresha3993@gmail.com>",
-    "license": "UNLICENSED",
+    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "https://github.com/VeereshPoojari/toastify-all.git"
